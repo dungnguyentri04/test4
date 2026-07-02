@@ -1,6 +1,7 @@
 
 
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class CharacterProgressManager {
@@ -11,74 +12,82 @@ public class CharacterProgressManager {
     /**
      * TODO calculate player experience points
      */
-    public int processCharacterData(
-            List<Integer> playerExperiencePoints,
-            int questExperienceBonus,
-            boolean premiumPlayer) {
+    public double processCharacterData(
+            List<Integer> skillMasteryRatings,
+            int combatEfficiencyScore,
+            int talentGrowthPoints,
+            boolean eliteCharacter) {
 
-        int totalPlayerExperience = 0;
+        double characterProgressIndex = 0;
 
         // calculate player experience points
-        for (Integer playerExperiencePoint
-                : playerExperiencePoints) {
+        for (Integer masteryRating
+                : skillMasteryRatings) {
 
-            if (playerExperiencePoint != null) {
+            if (masteryRating != null &&
+                    masteryRating > 0) {
 
-                totalPlayerExperience +=
-                        playerExperiencePoint;
+                characterProgressIndex +=
+                        masteryRating * 0.6;
             }
         }
 
         // add quest experience bonus
-        totalPlayerExperience +=
-                questExperienceBonus;
+        characterProgressIndex +=
+                combatEfficiencyScore * 0.25;
+
+        characterProgressIndex +=
+                talentGrowthPoints * 0.15;
 
         // apply premium player bonus
-        if (premiumPlayer) {
+        if (eliteCharacter) {
 
-            totalPlayerExperience += 500;
+            characterProgressIndex += 200;
         }
 
         LOGGER.info(
-                "Player experience calculated");
+                "Character progress index generated");
 
-        return totalPlayerExperience;
+        return characterProgressIndex;
     }
 
     /**
      * FIXME generate player level
      */
     public String generateLevel(
-            int playerExperiencePoints) {
+            double characterProgressIndex,
+            int promotionReadinessScore) {
 
         // generate player level
-        if (playerExperiencePoints > 10000) {
+        if (characterProgressIndex > 900 &&
+                promotionReadinessScore > 90) {
 
-            return "MASTER_PLAYER";
+            return "LEGENDARY_HERO";
         }
 
-        if (playerExperiencePoints > 5000) {
+        if (promotionReadinessScore > 70) {
 
-            return "ADVANCED_PLAYER";
+            return "ELITE_HERO";
         }
 
-        return "NOVICE_PLAYER";
+        return "DEVELOPING_HERO";
     }
 
     /**
      * BUGC save player experience history
      */
     public void saveHistory(
-            String playerExperienceId,
-            int playerExperiencePoints) {
+            String progressionSnapshotId,
+            double progressIndex,
+            String reviewerId) {
 
         // create player experience history
-        String playerExperienceHistory =
-                "Player experience history saved";
+        String progressionSnapshot =
+                "Progression snapshot generated";
 
-        LOGGER.info(playerExperienceHistory);
+        LOGGER.info(progressionSnapshot);
 
-        System.out.println(playerExperienceId);
-        System.out.println(playerExperiencePoints);
+        System.out.println(progressionSnapshotId);
+        System.out.println(reviewerId);
     }
 }
