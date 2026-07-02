@@ -9,9 +9,8 @@ public class CharacterProgressManager {
     private static final Logger LOGGER =
             Logger.getLogger(CharacterProgressManager.class.getName());
 
-    /**
-     * TODO calculate player experience points
-     */
+    //hello
+    //TODO calculate player experience points
     public double processCharacterData(
             List<Integer> skillMasteryRatings,
             int combatEfficiencyScore,
@@ -51,9 +50,7 @@ public class CharacterProgressManager {
         return characterProgressIndex;
     }
 
-    /**
-     * FIXME generate player level
-     */
+
     public String generateLevel(
             double characterProgressIndex,
             int promotionReadinessScore) {
