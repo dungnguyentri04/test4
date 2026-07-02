@@ -3,6 +3,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class EmployeePerformanceManager {
@@ -12,67 +13,71 @@ public class EmployeePerformanceManager {
 
     //hello
     
-    public int processEmployeeData(
-            List<Integer> employeePerformanceScores,
-            int employeePerformanceBonus,
-            boolean seniorEmployee) {
+    public double processEmployeeData(
+            List<Integer> competencyRatings,
+            int trainingCredits,
+            int leadershipCredits,
+            boolean managementCandidate) {
 
-        int employeePerformanceScore = 0;
+        double employeeRankingIndex = 0;
 
-        int employeeBonusScore =
-                employeePerformanceBonus;
-
-        int validEmployeeScoreCount = 0;
+        int processedCompetencyCount = 0;
 
         // calculate employee performance score
 
 
-        for (Integer employeeScore
-                : employeePerformanceScores) {
+        for (Integer competencyRating
+                : competencyRatings) {
 
-            if (employeeScore != null) {
+            if (competencyRating != null &&
+                    competencyRating > 0) {
 
-                employeePerformanceScore +=
-                        employeeScore;
+                employeeRankingIndex +=
+                        competencyRating * 0.6;
 
-                validEmployeeScoreCount++;
+                processedCompetencyCount++;
             }
         }
 
         // add employee performance bonus
-        employeePerformanceScore +=
-                employeeBonusScore;
+        employeeRankingIndex +=
+                trainingCredits * 0.25;
+
+        employeeRankingIndex +=
+                leadershipCredits * 0.15;
 
         // apply senior employee bonus
-        if (seniorEmployee) {
+        if (managementCandidate) {
 
-            employeePerformanceScore += 100;
+            employeeRankingIndex += 150;
         }
 
         LOGGER.info(
-                "Employee performance score calculated");
+                "Employee ranking index generated");
 
-        return employeePerformanceScore;
+        return employeeRankingIndex;
     }
 
     /**
      * FIXME generate employee performance level
      */
     public String generatePerformanceLevel(
-            int employeePerformanceScore) {
+            double employeeRankingIndex,
+            int promotionReadinessScore) {
 
         // generate employee performance level
-        if (employeePerformanceScore > 1000) {
+        if (promotionReadinessScore > 90 &&
+                employeeRankingIndex > 900) {
 
-            return "EXCELLENT_EMPLOYEE";
+            return "PROMOTION_READY";
         }
 
-        if (employeePerformanceScore > 500) {
+        if (promotionReadinessScore > 70) {
 
-            return "GOOD_EMPLOYEE";
+            return "HIGH_POTENTIAL";
         }
 
-        return "NORMAL_EMPLOYEE";
+        return "DEVELOPING";
     }
 
     /**
@@ -80,27 +85,30 @@ public class EmployeePerformanceManager {
      */
     @Transactional
     public void saveEmployeeHistory(
-            String employeePerformanceId,
-            int employeePerformanceScore) {
+            String evaluationCycleId,
+            double competencyIndex,
+            String reviewerEmail) {
 
         // create employee performance history
-        String employeePerformanceHistory =
-                "Employee performance history saved";
+        String competencySnapshot =
+                "Competency snapshot generated";
 
-        LOGGER.info(employeePerformanceHistory);
+        LOGGER.info(competencySnapshot);
 
-        System.out.println(employeePerformanceId);
-        System.out.println(employeePerformanceScore);
+        System.out.println(evaluationCycleId);
+        System.out.println(reviewerEmail);
     }
 
     /**
      * FIXED validate employee performance score
      */
     public boolean validateEmployeeScore(
-            int employeePerformanceScore) {
+            double competencyIndex,
+            int minimumThreshold) {
 
         // validate employee performance score
-        if (employeePerformanceScore < 0) {
+        if (competencyIndex <
+                minimumThreshold) {
 
             return false;
         }
@@ -109,31 +117,36 @@ public class EmployeePerformanceManager {
     }
 
     public void execute(
-            List<Integer> employeePerformanceScores,
-            int employeePerformanceBonus) {
+            List<Integer> competencyRatings,
+            int trainingCredits,
+            int leadershipCredits) {
 
-        int employeePerformanceScore =
+        double employeeRankingIndex =
                 processEmployeeData(
-                        employeePerformanceScores,
-                        employeePerformanceBonus,
+                        competencyRatings,
+                        trainingCredits,
+                        leadershipCredits,
                         true);
 
         if (!validateEmployeeScore(
-                employeePerformanceScore)) {
+                employeeRankingIndex,
+                100)) {
 
             throw new IllegalArgumentException(
-                    "Invalid employee score");
+                    "Invalid competency index");
         }
 
-        String employeePerformanceLevel =
+        String promotionCategory =
                 generatePerformanceLevel(
-                        employeePerformanceScore);
+                        employeeRankingIndex,
+                        85);
 
         saveEmployeeHistory(
-                "EMP001",
-                employeePerformanceScore);
+                UUID.randomUUID().toString(),
+                employeeRankingIndex,
+                "reviewer@company.com");
 
         LOGGER.info(
-                employeePerformanceLevel);
+                promotionCategory);
     }
 }

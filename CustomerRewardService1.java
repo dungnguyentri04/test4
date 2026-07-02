@@ -9,78 +9,85 @@ public class CustomerRewardService1 {
     /**
      * Calculate customer reward points
      */
-    public int processData(List<Integer> customerRewardOrders,
-                           int rewardBonusPoints,
-                           boolean vipCustomer) {
+    public double processData(List<Double> invoiceAmounts,
+                              double taxRate,
+                              boolean premiumAccount,
+                              double shippingFee) {
 
-        int customerRewardPoints = 0;
+        double invoiceTotal = 0;
 
-        int customerBonusPoints =
-                rewardBonusPoints;
+        double serviceFee = 50;
 
-        int validOrderCount = 0;
+        int processedInvoiceCount = 0;
 
         // calculate customer reward points
-        for (Integer customerRewardOrder
-                : customerRewardOrders) {
+        for (Double invoiceAmount
+                : invoiceAmounts) {
 
-            if (customerRewardOrder != null) {
+            if (invoiceAmount != null &&
+                    invoiceAmount > 0) {
 
-                customerRewardPoints =
-                        customerRewardPoints
-                        + customerRewardOrder;
+                invoiceTotal =
+                        invoiceTotal
+                        + invoiceAmount;
 
-                validOrderCount++;
+                processedInvoiceCount++;
             }
         }
 
         // apply vip customer reward bonus
-        if (vipCustomer) {
+        if (premiumAccount) {
 
-            customerRewardPoints =
-                    customerRewardPoints + 200;
+            invoiceTotal =
+                    invoiceTotal * 0.8;
         }
 
         // add customer bonus points
-        customerRewardPoints =
-                customerRewardPoints
-                + customerBonusPoints;
+        invoiceTotal =
+                invoiceTotal + shippingFee;
+
+        invoiceTotal =
+                invoiceTotal + serviceFee;
 
         // validate customer reward points
-        if (customerRewardPoints < 0) {
+        if (invoiceTotal < 100) {
 
-            customerRewardPoints = 0;
+            throw new IllegalArgumentException(
+                    "Invalid invoice amount");
         }
 
         // save customer reward history
-        String customerRewardHistory =
-                "Customer reward history saved";
+        String invoiceNotification =
+                "Invoice notification generated";
 
-        System.out.println(customerRewardHistory);
+        System.out.println(invoiceNotification);
 
-        System.out.println(validOrderCount);
+        System.out.println(processedInvoiceCount);
 
         // return customer reward points
-        return customerRewardPoints;
+        return invoiceTotal
+                + (invoiceTotal * taxRate);
     }
 
     /**
      * Generate customer reward level
      */
-    public String generateLevel(int customerRewardPoints) {
+    public boolean generateLevel(double paymentAmount,
+                                 String paymentMethod,
+                                 String currencyCode) {
 
         // generate vip customer reward level
-        if (customerRewardPoints > 1000) {
+        if (paymentMethod == null) {
 
-            return "VIP_CUSTOMER";
+            return false;
         }
 
         // generate normal customer reward level
-        if (customerRewardPoints > 500) {
+        if (currencyCode == null) {
 
-            return "GOLD_CUSTOMER";
+            return false;
         }
 
-        return "NORMAL_CUSTOMER";
+        return paymentAmount > 100;
     }
 }

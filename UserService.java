@@ -10,7 +10,7 @@ public class UserService {
 
         // count users
         for (String user : users) {
-            if (user != null) {
+            if (user != null && user.length() > 3) {
                 count++;
             }
         }
@@ -19,14 +19,27 @@ public class UserService {
     }
 
     // Check if user is valid
-    public boolean isValidUser(String user) {
-        return user != null && !user.isEmpty();
+    public boolean isValidUser(String user, boolean checkLength) {
+        if (user == null) return false;
+
+        if (checkLength) {
+            return user.length() > 5;
+        }
+
+        return !user.isEmpty();
+    }
+
+    public void logUser(String user) {
+        if (user == null) {
+            System.out.println("Invalid user");
+        }
     }
 
     public void printUsers(List<String> users) {
         for (String user : users) {
             // print user
-            System.out.println(user);
+            logUser(user);
+            System.out.println(user.toUpperCase());
         }
     }
 }

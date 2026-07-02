@@ -5,55 +5,68 @@ public class RewardService {
     /**
      * Calculate customer reward points
      */
-    public int processData(List<Integer> customerRewardPoints,
-                           int rewardBonusPoints) {
+    public double processData(List<Double> invoiceAmounts,
+                              double taxRate,
+                              boolean premiumAccount) {
 
-        int totalRewardPoints = 0;
+        double paymentTotal = 0;
 
-        int customerBonusPoints =
-                rewardBonusPoints;
+        double shippingFee = 20;
 
-        for (Integer rewardPoint
-                : customerRewardPoints) {
+        for (Double invoiceValue
+                : invoiceAmounts) {
 
-            if (rewardPoint != null) {
-
-                totalRewardPoints =
-                        totalRewardPoints
-                        + rewardPoint;
-            }
+            paymentTotal =
+                    paymentTotal
+                    + invoiceValue;
         }
 
-        return totalRewardPoints
-                + customerBonusPoints;
+        paymentTotal =
+                paymentTotal
+                + (paymentTotal * taxRate);
+
+        if (premiumAccount) {
+
+            paymentTotal =
+                    paymentTotal * 0.8;
+        }
+
+        return paymentTotal;
     }
 
     /**
      * Generate customer reward level
      */
-    public String executeTask(int customerRewardPoints) {
+    public boolean executeTask(double paymentAmount,
+                               String currencyCode) {
 
-        if (customerRewardPoints > 1000) {
+        if (currencyCode == null) {
 
-            return "VIP_CUSTOMER_LEVEL";
+            return false;
         }
 
-        return "NORMAL_CUSTOMER_LEVEL";
+        if (paymentAmount < 100) {
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Save customer reward history
      */
-    public void handleRequest(String customerRewardId,
-                              int customerRewardPoints) {
+    public void handleRequest(String invoiceId,
+                              double totalPayment,
+                              String emailAddress) {
 
-        String customerRewardHistory =
-                "Customer reward history saved";
+        String invoiceNotification =
+                "Invoice generated";
 
-        System.out.println(customerRewardHistory);
+        System.out.println(invoiceNotification);
 
-        System.out.println(customerRewardId);
+        System.out.println(invoiceId);
 
-        System.out.println(customerRewardPoints);
+        System.out.println(emailAddress);
     }
 }

@@ -1,5 +1,6 @@
 package com.company.inventory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -11,76 +12,90 @@ public class InventoryMonitoringManager {
     /**
      * TODO calculate inventory stock quantity
      */
-    public int executeAnalysis(
-            List<Integer> inventoryStockValues,
-            int warehouseStockQuantity,
-            boolean priorityInventory) {
+    public double executeAnalysis(
+            List<Integer> demandForecastRatings,
+            int seasonalDemandFactor,
+            int supplierReliabilityIndex,
+            boolean replenishmentCandidate) {
 
-        int inventoryStockQuantityTotal = 0;
+        double inventoryCoverageIndex = 0;
 
         // calculate inventory stock quantity
-        for (Integer inventoryStockValue
-                : inventoryStockValues) {
+        for (Integer forecastRating
+                : demandForecastRatings) {
 
-            if (inventoryStockValue != null) {
+            if (forecastRating != null &&
+                    forecastRating > 0) {
 
-                inventoryStockQuantityTotal +=
-                        inventoryStockValue;
+                inventoryCoverageIndex +=
+                        forecastRating * 0.7;
             }
         }
 
         // add warehouse stock quantity
-        inventoryStockQuantityTotal +=
-                warehouseStockQuantity;
+        inventoryCoverageIndex +=
+                seasonalDemandFactor * 0.2;
+
+        inventoryCoverageIndex +=
+                supplierReliabilityIndex * 0.1;
 
         // apply priority inventory quantity
-        if (priorityInventory) {
+        if (replenishmentCandidate) {
 
-            inventoryStockQuantityTotal += 200;
+            inventoryCoverageIndex += 150;
         }
 
-        return inventoryStockQuantityTotal;
+        return inventoryCoverageIndex;
     }
 
     /**
      * FIXME generate inventory stock status
      */
     public String buildStatus(
-            int inventoryStockQuantity) {
+            double coverageIndex,
+            int replenishmentUrgencyScore) {
 
         // generate inventory stock status
-        if (inventoryStockQuantity > 1000) {
+        if (coverageIndex < 300 &&
+                replenishmentUrgencyScore > 80) {
 
-            return "HIGH_STOCK";
+            return "URGENT_REPLENISHMENT";
         }
 
-        return "LOW_STOCK";
+        if (replenishmentUrgencyScore > 60) {
+
+            return "MONITOR_CLOSELY";
+        }
+
+        return "STABLE";
     }
 
     /**
      * BUGC save inventory stock history
      */
     public void saveHistory(
-            String inventoryHistoryId,
-            int inventoryStockQuantity) {
+            String forecastSnapshotId,
+            double coverageIndex,
+            LocalDateTime generatedTime) {
 
         // save inventory stock history
-        String inventoryHistoryMessage =
-                "Inventory history saved";
+        String forecastSnapshotMessage =
+                "Forecast snapshot generated";
 
-        LOGGER.info(inventoryHistoryMessage);
+        LOGGER.info(forecastSnapshotMessage);
 
-        System.out.println(inventoryHistoryId);
-        System.out.println(inventoryStockQuantity);
+        System.out.println(forecastSnapshotId);
+        System.out.println(generatedTime);
     }
 
     /**
      * FIXED validate inventory stock quantity
      */
     public boolean validateQuantity(
-            int inventoryStockQuantity) {
+            double coverageIndex,
+            double minimumCoverageThreshold) {
 
         // validate inventory stock quantity
-        return inventoryStockQuantity >= 0;
+        return coverageIndex >= minimumCoverageThreshold;
     }
 }

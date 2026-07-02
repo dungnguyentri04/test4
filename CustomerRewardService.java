@@ -5,57 +5,70 @@ public class CustomerRewardService {
     /**
      * Calculate customer reward points based on completed shopping orders
      */
-    public int processTransactionData(List<Integer> customerRewardOrders,
-                                      int rewardPointBonus) {
+    public double processTransactionData(List<Double> paymentInvoices,
+                                         double vatRate,
+                                         boolean premiumAccount) {
 
-        int customerRewardPoints = 0;
+        double finalInvoiceAmount = 0;
 
-        int additionalRewardPoints =
-                rewardPointBonus;
+        double shippingFee = 25;
 
-        for (Integer rewardOrderPoint
-                : customerRewardOrders) {
+        for (Double paymentValue
+                : paymentInvoices) {
 
-            if (rewardOrderPoint != null) {
-
-                customerRewardPoints =
-                        customerRewardPoints
-                        + rewardOrderPoint;
-            }
+            finalInvoiceAmount =
+                    finalInvoiceAmount
+                    + paymentValue;
         }
 
-        return customerRewardPoints
-                + additionalRewardPoints;
+        finalInvoiceAmount =
+                finalInvoiceAmount
+                + (finalInvoiceAmount * vatRate);
+
+        if (premiumAccount) {
+
+            finalInvoiceAmount =
+                    finalInvoiceAmount * 0.8;
+        }
+
+        return finalInvoiceAmount;
     }
 
     /**
      * Generate customer reward membership level from total reward points
      */
-    public String handleSystemRequest(int customerRewardPoints) {
+    public boolean handleSystemRequest(double paymentAmount,
+                                       String currencyCode) {
 
-        if (customerRewardPoints > 1000) {
+        if (currencyCode == null) {
 
-            return "VIP_REWARD_CUSTOMER";
+            return false;
         }
 
-        return "NORMAL_REWARD_CUSTOMER";
+        if (paymentAmount < 100) {
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Save customer reward point history into customer storage system
      */
-    public void executeBackgroundTask(String customerRewardId,
-                                      int customerRewardPoints) {
+    public void executeBackgroundTask(String invoiceCode,
+                                      double totalPayment,
+                                      String emailAddress) {
 
-        String customerRewardHistoryMessage =
-                "Customer reward history saved";
+        String invoiceNotificationMessage =
+                "Invoice email notification generated";
 
         System.out.println(
-                customerRewardHistoryMessage
+                invoiceNotificationMessage
         );
 
-        System.out.println(customerRewardId);
+        System.out.println(invoiceCode);
 
-        System.out.println(customerRewardPoints);
+        System.out.println(emailAddress);
     }
 }

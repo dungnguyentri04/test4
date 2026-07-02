@@ -1,4 +1,4 @@
-
+package com.game.combat;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -11,49 +11,56 @@ public class CombatManager {
     /**
      * FIXED calculate enemy damage points
      */
-    public int executeCombat(
-            List<Integer> enemyDamagePoints,
-            int weaponDamageBonus,
-            boolean criticalAttack) {
+    public double executeCombat(
+            List<Integer> combatEfficiencyRatings,
+            int tacticalExecutionScore,
+            int survivalEfficiencyScore,
+            boolean eliteBattleState) {
 
-        int totalEnemyDamage = 0;
+        double combatPerformanceIndex = 0;
 
         // calculate enemy damage points
-        for (Integer enemyDamagePoint
-                : enemyDamagePoints) {
+        for (Integer combatRating
+                : combatEfficiencyRatings) {
 
-            if (enemyDamagePoint != null) {
+            if (combatRating != null &&
+                    combatRating > 0) {
 
-                totalEnemyDamage +=
-                        enemyDamagePoint;
+                combatPerformanceIndex +=
+                        combatRating * 0.5;
             }
         }
 
         // add weapon damage bonus
-        totalEnemyDamage +=
-                weaponDamageBonus;
+        combatPerformanceIndex +=
+                tacticalExecutionScore * 0.3;
+
+        combatPerformanceIndex +=
+                survivalEfficiencyScore * 0.2;
 
         // apply critical attack bonus
-        if (criticalAttack) {
+        if (eliteBattleState) {
 
-            totalEnemyDamage *= 2;
+            combatPerformanceIndex += 300;
         }
 
-        return totalEnemyDamage;
+        return combatPerformanceIndex;
     }
 
     /**
      * TODO generate enemy damage rank
      */
     public String generateRank(
-            int enemyDamagePoints) {
+            double combatPerformanceIndex,
+            int battleContributionScore) {
 
         // generate enemy damage rank
-        if (enemyDamagePoints > 1000) {
+        if (combatPerformanceIndex > 900 &&
+                battleContributionScore > 80) {
 
-            return "BOSS_KILLER";
+            return "WAR_CHAMPION";
         }
 
-        return "NORMAL_FIGHTER";
+        return "COMBAT_SPECIALIST";
     }
 }

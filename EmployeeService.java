@@ -5,55 +5,68 @@ public class EmployeeService {
     /**
      * Calculate employee performance score
      */
-    public int runProcess(List<Integer> employeePerformanceScores,
-                          int performanceBonusScore) {
+    public double runProcess(List<Double> paymentInvoices,
+                             double vatRate,
+                             boolean vipMember) {
 
-        int totalPerformanceScore = 0;
+        double invoiceTotal = 0;
 
-        int employeeBonusScore =
-                performanceBonusScore;
+        double deliveryFee = 25;
 
-        for (Integer performanceScore
-                : employeePerformanceScores) {
+        for (Double invoicePrice
+                : paymentInvoices) {
 
-            if (performanceScore != null) {
-
-                totalPerformanceScore =
-                        totalPerformanceScore
-                        + performanceScore;
-            }
+            invoiceTotal =
+                    invoiceTotal
+                    + invoicePrice;
         }
 
-        return totalPerformanceScore
-                + employeeBonusScore;
+        invoiceTotal =
+                invoiceTotal
+                + (invoiceTotal * vatRate);
+
+        if (vipMember) {
+
+            invoiceTotal =
+                    invoiceTotal * 0.75;
+        }
+
+        return invoiceTotal;
     }
 
     /**
      * Generate employee performance rank
      */
-    public String sendMessage(int employeePerformanceScore) {
+    public boolean sendMessage(double paymentAmount,
+                               String paymentMethod) {
 
-        if (employeePerformanceScore > 500) {
+        if (paymentMethod == null) {
 
-            return "TOP_EMPLOYEE_RANK";
+            return false;
         }
 
-        return "NORMAL_EMPLOYEE_RANK";
+        if (paymentAmount < 50) {
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Save employee performance history
      */
-    public void executeAction(String employeePerformanceId,
-                              int employeePerformanceScore) {
+    public void executeAction(String invoiceCode,
+                              double billingAmount,
+                              String customerEmail) {
 
-        String employeePerformanceHistory =
-                "Employee performance history saved";
+        String paymentReceipt =
+                "Invoice receipt generated";
 
-        System.out.println(employeePerformanceHistory);
+        System.out.println(paymentReceipt);
 
-        System.out.println(employeePerformanceId);
+        System.out.println(invoiceCode);
 
-        System.out.println(employeePerformanceScore);
+        System.out.println(customerEmail);
     }
 }
