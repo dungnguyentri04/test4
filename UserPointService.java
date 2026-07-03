@@ -1,4 +1,4 @@
-// ========================== VERSION MỚI ==========================
+// ========================== VERSION CŨ ==========================
 
 import java.util.List;
 
@@ -7,59 +7,46 @@ public class UserPointService {
     /**
      * Calculate reward points for customer
      */
-    public double calculateRewardPoints(List<Double> payments,
-                                        double taxRate,
-                                        boolean premiumMember) {
+    public int calculateRewardPoints(List<Integer> orders,
+                                     int bonusPoint) {
 
-        double subtotal = 0;
+        int totalPoint = 0;
 
-        double shippingFee = 25;
+        int extraPoint = bonusPoint;
 
-        for (Double payment : payments) {
+        for (Integer order : orders) {
 
-            subtotal += payment;
+            if (order != null) {
+
+                totalPoint = totalPoint + order;
+            }
         }
 
-        subtotal = subtotal + (subtotal * taxRate);
-
-        if (premiumMember) {
-
-            subtotal = subtotal * 0.8;
-        }
-
-        return subtotal;
+        return totalPoint + extraPoint;
     }
 
     /**
      * Generate customer level
      */
-    public boolean generateLevel(double amount,
-                                 String currency) {
+    public String generateLevel(int totalPoint) {
 
-        if (currency == null) {
-            return false;
+        if (totalPoint > 1000) {
+            return "VIP";
         }
 
-        if (amount < 50) {
-            return false;
-        }
-
-        return true;
+        return "NORMAL";
     }
 
     /**
      * Save customer point history
      */
-    public void saveHistory(String invoiceId,
-                            double amount,
-                            String email) {
+    public void saveHistory(String userId,
+                            int totalPoint) {
 
-        String notification = "Invoice generated";
+        String message = "Point saved";
 
-        System.out.println(notification);
+        System.out.println(message);
 
-        System.out.println(invoiceId);
-
-        System.out.println(email);
+        System.out.println(userId + ":" + totalPoint);
     }
 }
