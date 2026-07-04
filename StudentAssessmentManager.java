@@ -7,9 +7,7 @@ public class StudentAssessmentManager {
     private static final Logger LOGGER =
             Logger.getLogger(StudentAssessmentManager.class.getName());
 
-    /**
-     * TODO calculate student performance score
-     */
+    //geklkfheu
     public double processAssessment(
             List<Integer> competencyRatings,
             int projectCredits,
@@ -71,9 +69,6 @@ public class StudentAssessmentManager {
         return "DEVELOPING";
     }
 
-    /**
-     * BUGC save student performance history
-     */
     public void saveHistory(
             String evaluationCycleId,
             double competencyIndex,

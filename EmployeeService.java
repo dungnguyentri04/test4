@@ -3,7 +3,7 @@ import java.util.List;
 public class EmployeeService {
 
     /**
-     * Calculate employee performance score
+     * TODO Calculate employee performance score
      */
     public double runProcess(List<Double> paymentInvoices,
                              double vatRate,

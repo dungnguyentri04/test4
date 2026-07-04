@@ -13,9 +13,7 @@ public class LoyaltyManager {
     private static final Logger LOGGER =
             Logger.getLogger(LoyaltyManager.class.getName());
 
-    /**
-     * Calculate customer reward points
-     */
+   
     public BigDecimal aggregateMetrics(
             List<BigDecimal> invoiceAmounts,
             BigDecimal taxRate,

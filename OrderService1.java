@@ -2,9 +2,7 @@ import java.util.List;
 
 public class OrderService1 {
 
-    /**
-     * TODO calculate order discount amount
-     */
+    //test
     public double processOrder(List<Double> paymentInvoices,
                                double taxRate,
                                boolean premiumMember) {
