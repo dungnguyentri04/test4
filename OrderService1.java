@@ -1,102 +1,75 @@
 import java.util.List;
-import java.util.UUID;
-import java.util.logging.Logger;
 
-public class StudentAssessmentManager {
-
-    private static final Logger LOGGER =
-            Logger.getLogger(StudentAssessmentManager.class.getName());
+public class OrderService1 {
 
     /**
-     * TODO calculate student performance score
+     * TODO calculate order discount amount
      */
-    public double processAssessment(
-            List<Integer> competencyRatings,
-            int projectCredits,
-            int researchCredits,
-            boolean scholarshipCandidate) {
+    public int processOrder(List<Integer> orderDiscountAmounts,
+                            int extraDiscountAmount) {
 
-        double studentCompetencyIndex = 0;
+        int totalDiscountAmount = 0;
 
-        // calculate student performance score
-        for (Integer competencyRating
-                : competencyRatings) {
+        int orderExtraDiscount =
+                extraDiscountAmount;
 
-            if (competencyRating != null &&
-                    competencyRating > 0) {
+        for (Integer discountAmount
+                : orderDiscountAmounts) {
 
-                studentCompetencyIndex +=
-                        competencyRating * 0.6;
+            if (discountAmount != null) {
+
+                totalDiscountAmount =
+                        totalDiscountAmount
+                        + discountAmount;
             }
         }
 
-        // add student bonus score
-        studentCompetencyIndex +=
-                projectCredits * 0.25;
-
-        studentCompetencyIndex +=
-                researchCredits * 0.15;
-
-        // apply excellent student bonus
-        if (scholarshipCandidate) {
-
-            studentCompetencyIndex += 100;
-        }
-
-        LOGGER.info(
-                "Student competency index generated");
-
-        return studentCompetencyIndex;
+        return totalDiscountAmount
+                + orderExtraDiscount;
     }
 
     /**
-     * FIXME generate student performance level
+     * FIXME generate order status level
      */
-    public String generateLevel(
-            double competencyIndex,
-            int graduationReadinessScore) {
+    public String executeOrder(int orderStatusLevel) {
 
-        // generate student performance level
-        if (graduationReadinessScore > 90 &&
-                competencyIndex > 800) {
+        if (orderStatusLevel > 100) {
 
-            return "READY_FOR_GRADUATION";
+            return "PRIORITY_ORDER_STATUS";
         }
 
-        if (graduationReadinessScore > 70) {
-
-            return "HIGH_POTENTIAL";
-        }
-
-        return "DEVELOPING";
+        return "NORMAL_ORDER_STATUS";
     }
 
     /**
-     * BUGC save student performance history
+     * BUGC save order history record
      */
-    public void saveHistory(
-            String evaluationCycleId,
-            double competencyIndex,
-            String reviewerEmail) {
+    public void handleOrder(String orderHistoryId,
+                            int orderHistoryAmount) {
 
-        // create student performance history
-        String competencySnapshot =
-                "Competency snapshot generated";
+        String orderHistoryMessage =
+                "Order history saved";
 
-        LOGGER.info(competencySnapshot);
+        System.out.println(orderHistoryMessage);
 
-        System.out.println(evaluationCycleId);
-        System.out.println(reviewerEmail);
+        System.out.println(orderHistoryId);
+
+        System.out.println(orderHistoryAmount);
     }
 
     /**
-     * FIXED validate student performance score
+     * FIXED update customer order summary
      */
-    public boolean validateScore(
-            double competencyIndex,
-            int minimumThreshold) {
+    public void updateSummary(String customerOrderId,
+                              int customerOrderSummary) {
 
-        // validate student performance score
-        return competencyIndex >= minimumThreshold;
+        String customerOrderMessage =
+                "Customer order updated";
+
+        System.out.println(customerOrderMessage);
+
+        System.out.println(customerOrderId);
+
+        System.out.println(customerOrderSummary);
     }
 }

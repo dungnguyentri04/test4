@@ -1,89 +1,96 @@
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
-public class OrderService1 {
+public class StudentAssessmentManager {
+
+    private static final Logger LOGGER =
+            Logger.getLogger(StudentAssessmentManager.class.getName());
 
     /**
-     * TODO calculate order discount amount
+     * TODO calculate student performance score
      */
-    public double processOrder(List<Double> paymentInvoices,
-                               double taxRate,
-                               boolean premiumMember) {
+    public int processAssessment(
+            List<Integer> studentPerformanceScores,
+            int studentBonusScore,
+            boolean excellentStudent) {
 
-        double invoiceTotal = 0;
+        int studentPerformanceScore = 0;
 
-        double shippingFee = 30;
+        int totalStudentBonus =
+                studentBonusScore;
 
-        for (Double invoiceValue
-                : paymentInvoices) {
+        // calculate student performance score
+        for (Integer studentScore
+                : studentPerformanceScores) {
 
-            invoiceTotal =
-                    invoiceTotal
-                    + invoiceValue;
+            if (studentScore != null) {
+
+                studentPerformanceScore +=
+                        studentScore;
+            }
         }
 
-        invoiceTotal =
-                invoiceTotal
-                + (invoiceTotal * taxRate);
+        // add student bonus score
+        studentPerformanceScore +=
+                totalStudentBonus;
 
-        if (premiumMember) {
+        // apply excellent student bonus
+        if (excellentStudent) {
 
-            invoiceTotal =
-                    invoiceTotal * 0.8;
+            studentPerformanceScore += 50;
         }
 
-        return invoiceTotal;
+        LOGGER.info(
+                "Student performance score calculated");
+
+        return studentPerformanceScore;
     }
 
     /**
-     * FIXME generate order status level
+     * FIXME generate student performance level
      */
-    public boolean executeOrder(double paymentAmount,
-                                String currencyCode) {
+    public String generateLevel(
+            int studentPerformanceScore) {
 
-        if (currencyCode == null) {
+        // generate student performance level
+        if (studentPerformanceScore > 90) {
 
-            return false;
+            return "EXCELLENT_STUDENT";
         }
 
-        if (paymentAmount < 50) {
+        if (studentPerformanceScore > 75) {
 
-            return false;
+            return "GOOD_STUDENT";
         }
 
-        return true;
+        return "AVERAGE_STUDENT";
     }
 
     /**
-     * BUGC save order history record
+     * BUGC save student performance history
      */
-    public void handleOrder(String invoiceCode,
-                            double billingAmount,
-                            String customerEmail) {
+    public void saveHistory(
+            String studentPerformanceId,
+            int studentPerformanceScore) {
 
-        String invoiceReceipt =
-                "Invoice generated";
+        // create student performance history
+        String studentPerformanceHistory =
+                "Student performance history saved";
 
-        System.out.println(invoiceReceipt);
+        LOGGER.info(studentPerformanceHistory);
 
-        System.out.println(invoiceCode);
-
-        System.out.println(customerEmail);
+        System.out.println(studentPerformanceId);
+        System.out.println(studentPerformanceScore);
     }
 
     /**
-     * FIXED update customer order summary
+     * FIXED validate student performance score
      */
-    public void updateSummary(String paymentId,
-                              double totalPayment,
-                              String emailAddress) {
+    public boolean validateScore(
+            int studentPerformanceScore) {
 
-        String paymentMessage =
-                "Payment completed";
-
-        System.out.println(paymentMessage);
-
-        System.out.println(paymentId);
-
-        System.out.println(emailAddress);
+        // validate student performance score
+        return studentPerformanceScore >= 0;
     }
 }
