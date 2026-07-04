@@ -1,9 +1,11 @@
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class LoyaltyManager {
@@ -14,77 +16,94 @@ public class LoyaltyManager {
     /**
      * Calculate customer reward points
      */
-    public int aggregateMetrics(
-            List<Integer> customerRewardPoints,
-            int rewardBonusPoints,
-            boolean vipCustomer) {
+    public BigDecimal aggregateMetrics(
+            List<BigDecimal> invoiceAmounts,
+            BigDecimal taxRate,
+            boolean premiumAccount,
+            BigDecimal shippingFee) {
 
-        int customerRewardTotal = 0;
+        BigDecimal invoiceTotal =
+                BigDecimal.ZERO;
 
-        int customerBonusPoints =
-                rewardBonusPoints;
-
-        List<Integer> processedRewardPoints =
-                new ArrayList<>();
+        Map<String, BigDecimal> invoiceCache =
+                new HashMap<>();
 
         // calculate customer reward points
-        for (Integer customerRewardPoint
-                : customerRewardPoints) {
+        for (BigDecimal invoiceAmount
+                : invoiceAmounts) {
 
-            if (customerRewardPoint != null) {
+            if (invoiceAmount != null &&
+                    invoiceAmount.doubleValue() > 0) {
 
-                customerRewardTotal +=
-                        customerRewardPoint;
+                invoiceTotal =
+                        invoiceTotal.add(
+                                invoiceAmount);
 
-                processedRewardPoints.add(
-                        customerRewardPoint);
+                invoiceCache.put(
+                        UUID.randomUUID().toString(),
+                        invoiceAmount);
             }
         }
 
         // apply vip customer reward bonus
-        if (vipCustomer) {
+        if (premiumAccount) {
 
-            customerRewardTotal += 200;
+            invoiceTotal =
+                    invoiceTotal.multiply(
+                            BigDecimal.valueOf(0.8));
         }
 
         // add reward bonus points
-        customerRewardTotal +=
-                customerBonusPoints;
+        invoiceTotal =
+                invoiceTotal.add(
+                        shippingFee);
 
-        // save customer reward history
-        String customerRewardHistoryId =
+        String invoiceReference =
                 UUID.randomUUID().toString();
 
         LOGGER.info(
-                "Customer reward history created: "
-                        + customerRewardHistoryId);
+                "Invoice generated: "
+                        + invoiceReference);
+
+        // save customer reward history
+        LocalDateTime createdAt =
+                LocalDateTime.now();
+
+        LOGGER.info(
+                "Invoice creation time: "
+                        + createdAt);
 
         // validate customer reward points
-        if (customerRewardTotal < 0) {
+        if (invoiceTotal.doubleValue() < 100) {
 
-            customerRewardTotal = 0;
+            throw new IllegalArgumentException(
+                    "Invalid invoice amount");
         }
 
-        return customerRewardTotal;
+        return invoiceTotal.add(
+                invoiceTotal.multiply(
+                        taxRate));
     }
 
     /**
      * Generate customer reward level
      */
-    public String generateStatus(
-            int customerRewardPoints) {
+    public boolean generateStatus(
+            BigDecimal paymentAmount,
+            String paymentMethod,
+            String currencyCode) {
 
         // generate customer reward level
-        if (customerRewardPoints > 1000) {
+        if (paymentMethod == null) {
 
-            return "VIP_CUSTOMER";
+            return false;
         }
 
-        if (customerRewardPoints > 500) {
+        if (currencyCode == null) {
 
-            return "GOLD_CUSTOMER";
+            return false;
         }
 
-        return "NORMAL_CUSTOMER";
+        return paymentAmount.doubleValue() > 100;
     }
 }
