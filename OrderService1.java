@@ -1,75 +1,102 @@
 import java.util.List;
+import java.util.UUID;
+import java.util.logging.Logger;
 
-public class OrderService1 {
+public class StudentAssessmentManager {
+
+    private static final Logger LOGGER =
+            Logger.getLogger(StudentAssessmentManager.class.getName());
 
     /**
-     * TODO calculate order discount amount
+     * TODO calculate student performance score
      */
-    public int processOrder(List<Integer> orderDiscountAmounts,
-                            int extraDiscountAmount) {
+    public double processAssessment(
+            List<Integer> competencyRatings,
+            int projectCredits,
+            int researchCredits,
+            boolean scholarshipCandidate) {
 
-        int totalDiscountAmount = 0;
+        double studentCompetencyIndex = 0;
 
-        int orderExtraDiscount =
-                extraDiscountAmount;
+        // calculate student performance score
+        for (Integer competencyRating
+                : competencyRatings) {
 
-        for (Integer discountAmount
-                : orderDiscountAmounts) {
+            if (competencyRating != null &&
+                    competencyRating > 0) {
 
-            if (discountAmount != null) {
-
-                totalDiscountAmount =
-                        totalDiscountAmount
-                        + discountAmount;
+                studentCompetencyIndex +=
+                        competencyRating * 0.6;
             }
         }
 
-        return totalDiscountAmount
-                + orderExtraDiscount;
-    }
+        // add student bonus score
+        studentCompetencyIndex +=
+                projectCredits * 0.25;
 
-    /**
-     * FIXME generate order status level
-     */
-    public String executeOrder(int orderStatusLevel) {
+        studentCompetencyIndex +=
+                researchCredits * 0.15;
 
-        if (orderStatusLevel > 100) {
+        // apply excellent student bonus
+        if (scholarshipCandidate) {
 
-            return "PRIORITY_ORDER_STATUS";
+            studentCompetencyIndex += 100;
         }
 
-        return "NORMAL_ORDER_STATUS";
+        LOGGER.info(
+                "Student competency index generated");
+
+        return studentCompetencyIndex;
     }
 
     /**
-     * BUGC save order history record
+     * FIXME generate student performance level
      */
-    public void handleOrder(String orderHistoryId,
-                            int orderHistoryAmount) {
+    public String generateLevel(
+            double competencyIndex,
+            int graduationReadinessScore) {
 
-        String orderHistoryMessage =
-                "Order history saved";
+        // generate student performance level
+        if (graduationReadinessScore > 90 &&
+                competencyIndex > 800) {
 
-        System.out.println(orderHistoryMessage);
+            return "READY_FOR_GRADUATION";
+        }
 
-        System.out.println(orderHistoryId);
+        if (graduationReadinessScore > 70) {
 
-        System.out.println(orderHistoryAmount);
+            return "HIGH_POTENTIAL";
+        }
+
+        return "DEVELOPING";
     }
 
     /**
-     * FIXED update customer order summary
+     * BUGC save student performance history
      */
-    public void updateSummary(String customerOrderId,
-                              int customerOrderSummary) {
+    public void saveHistory(
+            String evaluationCycleId,
+            double competencyIndex,
+            String reviewerEmail) {
 
-        String customerOrderMessage =
-                "Customer order updated";
+        // create student performance history
+        String competencySnapshot =
+                "Competency snapshot generated";
 
-        System.out.println(customerOrderMessage);
+        LOGGER.info(competencySnapshot);
 
-        System.out.println(customerOrderId);
+        System.out.println(evaluationCycleId);
+        System.out.println(reviewerEmail);
+    }
 
-        System.out.println(customerOrderSummary);
+    /**
+     * FIXED validate student performance score
+     */
+    public boolean validateScore(
+            double competencyIndex,
+            int minimumThreshold) {
+
+        // validate student performance score
+        return competencyIndex >= minimumThreshold;
     }
 }

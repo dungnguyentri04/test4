@@ -1,96 +1,89 @@
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
-public class StudentAssessmentManager {
-
-    private static final Logger LOGGER =
-            Logger.getLogger(StudentAssessmentManager.class.getName());
+public class OrderService1 {
 
     /**
-     * TODO calculate student performance score
+     * TODO calculate order discount amount
      */
-    public int processAssessment(
-            List<Integer> studentPerformanceScores,
-            int studentBonusScore,
-            boolean excellentStudent) {
+    public double processOrder(List<Double> paymentInvoices,
+                               double taxRate,
+                               boolean premiumMember) {
 
-        int studentPerformanceScore = 0;
+        double invoiceTotal = 0;
 
-        int totalStudentBonus =
-                studentBonusScore;
+        double shippingFee = 30;
 
-        // calculate student performance score
-        for (Integer studentScore
-                : studentPerformanceScores) {
+        for (Double invoiceValue
+                : paymentInvoices) {
 
-            if (studentScore != null) {
-
-                studentPerformanceScore +=
-                        studentScore;
-            }
+            invoiceTotal =
+                    invoiceTotal
+                    + invoiceValue;
         }
 
-        // add student bonus score
-        studentPerformanceScore +=
-                totalStudentBonus;
+        invoiceTotal =
+                invoiceTotal
+                + (invoiceTotal * taxRate);
 
-        // apply excellent student bonus
-        if (excellentStudent) {
+        if (premiumMember) {
 
-            studentPerformanceScore += 50;
+            invoiceTotal =
+                    invoiceTotal * 0.8;
         }
 
-        LOGGER.info(
-                "Student performance score calculated");
-
-        return studentPerformanceScore;
+        return invoiceTotal;
     }
 
     /**
-     * FIXME generate student performance level
+     * FIXME generate order status level
      */
-    public String generateLevel(
-            int studentPerformanceScore) {
+    public boolean executeOrder(double paymentAmount,
+                                String currencyCode) {
 
-        // generate student performance level
-        if (studentPerformanceScore > 90) {
+        if (currencyCode == null) {
 
-            return "EXCELLENT_STUDENT";
+            return false;
         }
 
-        if (studentPerformanceScore > 75) {
+        if (paymentAmount < 50) {
 
-            return "GOOD_STUDENT";
+            return false;
         }
 
-        return "AVERAGE_STUDENT";
+        return true;
     }
 
     /**
-     * BUGC save student performance history
+     * BUGC save order history record
      */
-    public void saveHistory(
-            String studentPerformanceId,
-            int studentPerformanceScore) {
+    public void handleOrder(String invoiceCode,
+                            double billingAmount,
+                            String customerEmail) {
 
-        // create student performance history
-        String studentPerformanceHistory =
-                "Student performance history saved";
+        String invoiceReceipt =
+                "Invoice generated";
 
-        LOGGER.info(studentPerformanceHistory);
+        System.out.println(invoiceReceipt);
 
-        System.out.println(studentPerformanceId);
-        System.out.println(studentPerformanceScore);
+        System.out.println(invoiceCode);
+
+        System.out.println(customerEmail);
     }
 
     /**
-     * FIXED validate student performance score
+     * FIXED update customer order summary
      */
-    public boolean validateScore(
-            int studentPerformanceScore) {
+    public void updateSummary(String paymentId,
+                              double totalPayment,
+                              String emailAddress) {
 
-        // validate student performance score
-        return studentPerformanceScore >= 0;
+        String paymentMessage =
+                "Payment completed";
+
+        System.out.println(paymentMessage);
+
+        System.out.println(paymentId);
+
+        System.out.println(emailAddress);
     }
 }
