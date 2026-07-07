@@ -2,86 +2,74 @@ import java.util.List;
 
 public class OrderService1 {
 
-    //test
-    public double processOrder(List<Double> paymentInvoices,
-                               double taxRate,
-                               boolean premiumMember) {
+    /**
+     * TODO calculate order discount amount
+     */
+    public int processOrder(List<Integer> orderDiscountAmounts,
+                            int extraDiscountAmount) {
 
-        double invoiceTotal = 0;
+        int totalDiscountAmount = 0;
 
-        double shippingFee = 30;
+        int orderExtraDiscount =
+                extraDiscountAmount;
 
-        for (Double invoiceValue
-                : paymentInvoices) {
+        for (Integer discountAmount
+                : orderDiscountAmounts) {
 
-            invoiceTotal =
-                    invoiceTotal
-                    + invoiceValue;
+            if (discountAmount != null) {
+
+                totalDiscountAmount =
+                        totalDiscountAmount
+                        + discountAmount;
+            }
         }
 
-        invoiceTotal =
-                invoiceTotal
-                + (invoiceTotal * taxRate);
-
-        if (premiumMember) {
-
-            invoiceTotal =
-                    invoiceTotal * 0.8;
-        }
-
-        return invoiceTotal;
+        return totalDiscountAmount
+                + orderExtraDiscount;
     }
 
     /**
      * FIXME generate order status level
      */
-    public boolean executeOrder(double paymentAmount,
-                                String currencyCode) {
+    public String executeOrder(int orderStatusLevel) {
 
-        if (currencyCode == null) {
+        if (orderStatusLevel > 100) {
 
-            return false;
+            return "PRIORITY_ORDER_STATUS";
         }
 
-        if (paymentAmount < 50) {
-
-            return false;
-        }
-
-        return true;
+        return "NORMAL_ORDER_STATUS";
     }
 
     /**
      * BUGC save order history record
      */
-    public void handleOrder(String invoiceCode,
-                            double billingAmount,
-                            String customerEmail) {
+    public void handleOrder(String orderHistoryId,
+                            int orderHistoryAmount) {
 
-        String invoiceReceipt =
-                "Invoice generated";
+        String orderHistoryMessage =
+                "Order history saved";
 
-        System.out.println(invoiceReceipt);
+        System.out.println(orderHistoryMessage);
 
-        System.out.println(invoiceCode);
+        System.out.println(orderHistoryId);
 
-        System.out.println(customerEmail);
+        System.out.println(orderHistoryAmount);
     }
 
     /**
      * FIXED update customer order summary
      */
-    public void updateSummary(String paymentId,
-                              double totalPayment,
-                              String emailAddress) {
+    public void updateSummary(String customerOrderId,
+                              int customerOrderSummary) {
 
-        String paymentMessage =
-                "Payment completed";
+        String customerOrderMessage =
+                "Customer order updated";
 
-        System.out.println(paymentMessage);
+        System.out.println(customerOrderMessage);
 
-        System.out.println(paymentId);
+        System.out.println(customerOrderId);
 
-        System.out.println(emailAddress);
+        System.out.println(customerOrderSummary);
     }
 }
