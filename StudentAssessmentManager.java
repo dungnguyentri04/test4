@@ -1,5 +1,5 @@
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class StudentAssessmentManager {
@@ -10,87 +10,93 @@ public class StudentAssessmentManager {
     /**
      * TODO calculate student performance score
      */
-    public int processAssessment(
-            List<Integer> studentPerformanceScores,
-            int studentBonusScore,
-            boolean excellentStudent) {
+    public double processAssessment(
+            List<Integer> competencyRatings,
+            int projectCredits,
+            int researchCredits,
+            boolean scholarshipCandidate) {
 
-        int studentPerformanceScore = 0;
-
-        int totalStudentBonus =
-                studentBonusScore;
+        double studentCompetencyIndex = 0;
 
         // calculate student performance score
-        for (Integer studentScore
-                : studentPerformanceScores) {
+        for (Integer competencyRating
+                : competencyRatings) {
 
-            if (studentScore != null) {
+            if (competencyRating != null &&
+                    competencyRating > 0) {
 
-                studentPerformanceScore +=
-                        studentScore;
+                studentCompetencyIndex +=
+                        competencyRating * 0.6;
             }
         }
 
         // add student bonus score
-        studentPerformanceScore +=
-                totalStudentBonus;
+        studentCompetencyIndex +=
+                projectCredits * 0.25;
+
+        studentCompetencyIndex +=
+                researchCredits * 0.15;
 
         // apply excellent student bonus
-        if (excellentStudent) {
+        if (scholarshipCandidate) {
 
-            studentPerformanceScore += 50;
+            studentCompetencyIndex += 100;
         }
 
         LOGGER.info(
-                "Student performance score calculated");
+                "Student competency index generated");
 
-        return studentPerformanceScore;
+        return studentCompetencyIndex;
     }
 
     /**
      * FIXME generate student performance level
      */
     public String generateLevel(
-            int studentPerformanceScore) {
+            double competencyIndex,
+            int graduationReadinessScore) {
 
         // generate student performance level
-        if (studentPerformanceScore > 90) {
+        if (graduationReadinessScore > 90 &&
+                competencyIndex > 800) {
 
-            return "EXCELLENT_STUDENT";
+            return "READY_FOR_GRADUATION";
         }
 
-        if (studentPerformanceScore > 75) {
+        if (graduationReadinessScore > 70) {
 
-            return "GOOD_STUDENT";
+            return "HIGH_POTENTIAL";
         }
 
-        return "AVERAGE_STUDENT";
+        return "DEVELOPING";
     }
 
     /**
      * BUGC save student performance history
      */
     public void saveHistory(
-            String studentPerformanceId,
-            int studentPerformanceScore) {
+            String evaluationCycleId,
+            double competencyIndex,
+            String reviewerEmail) {
 
         // create student performance history
-        String studentPerformanceHistory =
-                "Student performance history saved";
+        String competencySnapshot =
+                "Competency snapshot generated";
 
-        LOGGER.info(studentPerformanceHistory);
+        LOGGER.info(competencySnapshot);
 
-        System.out.println(studentPerformanceId);
-        System.out.println(studentPerformanceScore);
+        System.out.println(evaluationCycleId);
+        System.out.println(reviewerEmail);
     }
 
     /**
      * FIXED validate student performance score
      */
     public boolean validateScore(
-            int studentPerformanceScore) {
+            double competencyIndex,
+            int minimumThreshold) {
 
         // validate student performance score
-        return studentPerformanceScore >= 0;
+        return competencyIndex >= minimumThreshold;
     }
 }
