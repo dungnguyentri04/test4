@@ -34,7 +34,9 @@ public class EmployeeService {
         return invoiceTotal;
     }
 
-    // Test update comment
+    /**
+     * Generate employee performance rank
+     */
     public boolean sendMessage(double paymentAmount,
                                String paymentMethod) {
 
