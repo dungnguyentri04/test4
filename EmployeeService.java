@@ -35,7 +35,7 @@ public class EmployeeService {
     }
 
     /**
-     * Generate employee performance rank
+     * TODO Generate employee performance rank
      */
     public boolean sendMessage(double paymentAmount,
                                String paymentMethod) {
@@ -53,9 +53,6 @@ public class EmployeeService {
         return true;
     }
 
-    /**
-     * Save employee performance history
-     */
     public void executeAction(String invoiceCode,
                               double billingAmount,
                               String customerEmail) {

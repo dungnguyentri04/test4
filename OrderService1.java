@@ -34,9 +34,7 @@ public class OrderService1 {
         return invoiceTotal;
     }
 
-    /**
-     * FIXME generate order status level
-     */
+    //update comment
     public boolean executeOrder(double paymentAmount,
                                 String currencyCode) {
 
